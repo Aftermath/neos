@@ -16,7 +16,7 @@ setup(
     url=PROJECT_URL,
     license=PROJECT_LICENSE,
     include_package_data=True,
-    install_requires=['libvirt'],
+    install_requires=['libvirt-python'],
     test_suite='tests',
     keywords=PROJECT_KEYWORDS,
     classifiers=PROJECT_CLASSIFIERS,
