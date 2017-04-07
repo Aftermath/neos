@@ -8,35 +8,9 @@ class NeosHypervisor(object):
 
     def __init__(self, name='localhost'):
         """Init NeosHypervisor class."""
-        self.family = None
-        self.instance = None
-
-        self.name = name
+        self.uri = None
+        return None
 
     def __repr__(self):
         """Object representation."""
-        return "<{0}: {1}>".format(self.__class__.__name__, self.name)
-
-    def connect(self):
-        """Connect to a hypervisor."""
-        pass
-
-    def create_snapshot(self):
-        """Create Snapshot."""
-        pass
-
-    def list_vms(self):
-        """List virtual machine."""
-        pass
-
-    def remove_snapshot(self):
-        """Remove Snapshot."""
-        pass
-
-    def start_vm(self):
-        """Start virtual machine."""
-        pass
-
-    def stop_vm(self):
-        """Stop virtual machine."""
-        pass
+        return "<{0}: {1}>".format(self.__class__.__name__, self.uri)
