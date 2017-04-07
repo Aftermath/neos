@@ -99,7 +99,7 @@ class NeosHypervisorLibvirt(NeosHypervisor):
 
     @property
     def is_encrypted(self):
-        """Return max_vcpus."""
+        """Return if connection is encyrpted."""
         return bool(self.instance.isEncrypted())
 
     @property
@@ -108,7 +108,7 @@ class NeosHypervisorLibvirt(NeosHypervisor):
         return bool(self.instance.isSecure())
 
     def get_free_memory(self, unit='B'):
-        """Return max_vcpus."""
+        """Return free memory"""
         memory = self.instance.getMemoryStats(
             libvirt.VIR_NODE_MEMORY_STATS_ALL_CELLS)
         return humanize_bytes(memory['free'], unit)
