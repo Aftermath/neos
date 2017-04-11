@@ -8,6 +8,7 @@ def round_size(value):
     value = round(value, 2)
     return value
 
+
 def humanize_bytes(value, unit='B'):
     """Return humanized value from bytes."""
     if unit == 'KB':
