@@ -4,17 +4,16 @@
 
 
 def round_size(value):
-    """Return value rounded to 2 decimal places"""
-    value=round(value, 2)
+    """Return value rounded to 2 decimal places."""
+    value = round(value, 2)
     return value
 
 def humanize_bytes(value, unit='B'):
     """Return humanized value from bytes."""
     if unit == 'KB':
-        value=value / 1024
+        value = value / 1024
     if unit == 'MB':
-        value=value / 1024 / 1024
+        value = value / 1024 / 1024
     elif unit == 'GB':
-        value=value / 1024 / 1024 / 1024
+        value = value / 1024 / 1024 / 1024
     return round_size(value)
-
