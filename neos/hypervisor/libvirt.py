@@ -60,42 +60,42 @@ class NeosHypervisorLibvirt(NeosHypervisor):
 
     @property
     def get_cpu_arch(self):
-        """Return max_vcpus."""
+        """Return CPU Arch."""
         return self.instance.getInfo()[0]
 
     @property
     def get_memory(self):
-        """Return max_vcpus."""
+        """Return Memory Amount."""
         return self.instance.getInfo()[1]
 
     @property
     def get_cpus(self):
-        """Return max_vcpus."""
+        """Return CPU Count."""
         return self.instance.getInfo()[2]
 
     @property
     def get_cpu_sockets(self):
-        """Return max_vcpus."""
+        """Return CPU Socket Count."""
         return self.instance.getInfo()[5]
 
     @property
     def get_cpu_cores_per_socket(self):
-        """Return max_vcpus."""
+        """Return Cores per Socket."""
         return self.instance.getInfo()[6]
 
     @property
     def get_cpu_threads_per_core(self):
-        """Return max_vcpus."""
+        """Return Threads per Core."""
         return self.instance.getInfo()[7]
 
     @property
     def family(self):
-        """Return max_vcpus."""
+        """Return OS Family."""
         return self.instance.getType()
 
     @property
     def is_alive(self):
-        """Return max_vcpus."""
+        """Return Power Status."""
         return bool(self.instance.isAlive())
 
     @property
@@ -105,7 +105,7 @@ class NeosHypervisorLibvirt(NeosHypervisor):
 
     @property
     def is_secure(self):
-        """Return max_vcpus."""
+        """Return is Secure."""
         return bool(self.instance.isSecure())
 
     def get_free_memory(self, unit='B'):
