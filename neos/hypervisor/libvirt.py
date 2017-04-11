@@ -117,15 +117,23 @@ class NeosHypervisorLibvirt(NeosHypervisor):
     @property
     def list_all_vms(self):
         """Return a list of all VMS."""
-        return self.instance.listDefinedDomains()
+        return self.list_stopped_vms + self.list_running_vms
+
+    @property
+    def list_stopped_vms(self):
+        """Return a list of stopped VMS."""
+        vms = []
+        for vm in self.instance.listDefinedDomains():
+            vms.append(NeosLibvirtVM(self.instance.lookupByName(vm)))
+        return vms
 
     @property
     def list_running_vms(self):
-        """List with all running vms (tuple vm name)."""
+        """Return a list of running vms."""
         vms = []
         for vm_id in self.instance.listDomainsID():
             vm = self.instance.lookupByID(vm_id)
-            vms.append((vm.name(), vm))
+            vms.append(NeosLibvirtVM(vm))
         return vms
 
     @property
@@ -136,6 +144,44 @@ class NeosHypervisorLibvirt(NeosHypervisor):
     def get_vm(self, name):
         """Return VM object if exists."""
         try:
-            return self.instance.lookupByName(name)
+            return NeosLibvirtVM(self.instance.lookupByName(name))
         except libvirtError as error:
             return error
+
+
+class NeosLibvirtVM(object):
+    """Initialize libvirt instance."""
+
+    def __init__(self, instance):
+        """initialize object."""
+        self._instance = instance
+        self.name = self._instance.name()
+
+    def __repr__(self):
+        """Define object representation."""
+        return "<{0} ({1}): {2}>".format(self.__class__.__name__, self.status, self.name)
+
+    def start(self):
+        """Start virtual machine."""
+        return not bool(self._instance.create())
+
+    def stop(self):
+        """Stop virtual machine."""
+        return not bool(self._instance.destroy())
+
+    @property
+    def status(self):
+        """
+        Return virtual machine state.
+
+        [1,1] -> vm is running
+        """
+        if bool(self._instance.state() == [1,1]):
+            return 'running'
+        else:
+            return 'stopped'
+
+    @property
+    def snapshots(self):
+        """Return number of snapshots."""
+        return len(self._instance.listAllSnapshots())

@@ -14,11 +14,40 @@ Working with Libvirt
     h.uri
     'qemu:///system'
 
-    # getting a list of all vms
+    # list all VMS
     h.list_all_vms
-    ['iptables-67b', 'katello_foreman',
-     'rhel7.1-yum-keepcache', 'fedora25', 'android']
+    [<NeosLibvirtVM (stopped): iptables-67b>,
+     <NeosLibvirtVM (stopped): katello_foreman>,
+     <NeosLibvirtVM (stopped): rhel7.1-yum-keepcache>,
+     <NeosLibvirtVM (running): android>]
 
-    # list with tuple objects from running vms
-    [('fedora25', <libvirt.virDomain at 0x7fdc9c068668>),
-     ('android', <libvirt.virDomain at 0x7fdc9c0659e8>)]
+    # list only stopped vms
+    h.list_all_vms
+    [<NeosLibvirtVM (stopped): iptables-67b>,
+     <NeosLibvirtVM (stopped): katello_foreman>,
+     <NeosLibvirtVM (stopped): rhel7.1-yum-keepcache>]
+
+    # list only running vms
+    h.list_running_vms
+    [<NeosLibvirtVM (running): android>]
+
+
+    # starting a VM
+    vm1 = h.get_vm('iptables-67b')
+
+    # checking vm status
+    vm1.status
+    'stopped'
+
+    # checking vm name
+    vm1.name
+    'iptables-67b'
+
+    # starting vm
+    vm1.start()
+    True
+
+    # checking vm status
+    vm1.status
+    'running'
+
