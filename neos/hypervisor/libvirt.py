@@ -123,8 +123,8 @@ class NeosHypervisorLibvirt(NeosHypervisor):
     def list_stopped_vms(self):
         """Return a list of stopped VMS."""
         vms = []
-        for vm in self.instance.listDefinedDomains():
-            vms.append(NeosLibvirtVM(self.instance.lookupByName(vm)))
+        for vm_instance in self.instance.listDefinedDomains():
+            vms.append(NeosLibvirtVM(self.instance.lookupByName(vm_instance)))
         return vms
 
     @property
@@ -132,8 +132,8 @@ class NeosHypervisorLibvirt(NeosHypervisor):
         """Return a list of running vms."""
         vms = []
         for vm_id in self.instance.listDomainsID():
-            vm = self.instance.lookupByID(vm_id)
-            vms.append(NeosLibvirtVM(vm))
+            vm_instance = self.instance.lookupByID(vm_id)
+            vms.append(NeosLibvirtVM(vm_instance))
         return vms
 
     @property
@@ -159,7 +159,9 @@ class NeosLibvirtVM(object):
 
     def __repr__(self):
         """Define object representation."""
-        return "<{0} ({1}): {2}>".format(self.__class__.__name__, self.status, self.name)
+        return "<{0} ({1}): {2}>".format(self.__class__.__name__,
+                                         self.status,
+                                         self.name)
 
     def start(self):
         """Start virtual machine."""
@@ -176,7 +178,7 @@ class NeosLibvirtVM(object):
 
         [1,1] -> vm is running
         """
-        if bool(self._instance.state() == [1,1]):
+        if bool(self._instance.state() == [1, 1]):
             return 'running'
         else:
             return 'stopped'
