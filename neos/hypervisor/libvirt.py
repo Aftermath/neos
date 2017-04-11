@@ -2,6 +2,7 @@
 # vim:sw=4:ts=4:et:
 """Libvirt Hypervisor file."""
 import libvirt
+from libvirt import libvirtError
 
 from neos.utils import humanize_bytes
 from neos.hypervisor import NeosHypervisor
@@ -112,3 +113,29 @@ class NeosHypervisorLibvirt(NeosHypervisor):
         memory = self.instance.getMemoryStats(
             libvirt.VIR_NODE_MEMORY_STATS_ALL_CELLS)
         return humanize_bytes(memory['free'], unit)
+
+    @property
+    def list_all_vms(self):
+        """Return a list of all VMS."""
+        return self.instance.listDefinedDomains()
+
+    @property
+    def list_running_vms(self):
+        """List with all running vms (tuple vm name)."""
+        vms = []
+        for vm_id in self.instance.listDomainsID():
+            vm = self.instance.lookupByID(vm_id)
+            vms.append((vm.name(), vm))
+        return vms
+
+    @property
+    def list_nw_filters(self):
+        """Return a list of the network filter."""
+        return self.instance.listNWFilters()
+
+    def get_vm(self, name):
+        """Return VM object if exists."""
+        try:
+            return self.instance.lookupByName(name)
+        except libvirtError as error:
+            return error
