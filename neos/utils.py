@@ -12,12 +12,9 @@ def humanize_bytes(value, unit='B'):
     """Return humanized value from bytes."""
     if unit == 'KB':
         value=value / 1024
-        return round_size(value)
     if unit == 'MB':
         value=value / 1024 / 1024
-        return round_size(value)
     elif unit == 'GB':
         value=value / 1024 / 1024 / 1024
-        return round_size(value)
     return round_size(value)
 
