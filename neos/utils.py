@@ -3,10 +3,18 @@
 """Neos utils."""
 
 
-def humanize_bytes(value, unit='KB'):
-    """Return humanized value from kilobytes."""
-    if unit == 'MB':
-        return value / 1024
-    elif unit == 'GB':
-        return value / 1024 / 1024
+def round_size(value):
+    """Return value rounded to 2 decimal places."""
+    value = round(value, 2)
     return value
+
+
+def humanize_bytes(value, unit='B'):
+    """Return humanized value from bytes."""
+    if unit == 'KB':
+        value = value / 1024
+    if unit == 'MB':
+        value = value / 1024 / 1024
+    elif unit == 'GB':
+        value = value / 1024 / 1024 / 1024
+    return round_size(value)
