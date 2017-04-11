@@ -1,10 +1,7 @@
 # coding: utf-8
 # vim:sw=4:ts=4:et:
 """Libvirt Hypervisor file."""
-try:
-    import libvirt
-except ImportError:  # bypassing error for now due Travis tests
-    pass
+import libvirt
 
 from neos.utils import humanize_bytes
 from neos.hypervisor import NeosHypervisor
