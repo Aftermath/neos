@@ -6,10 +6,9 @@
 class NeosHypervisor(object):
     """Define generic class for Neos Hypervisor."""
 
-    def __init__(self, name='localhost'):
+    def __init__(self):
         """Init NeosHypervisor class."""
         self.uri = None
-        return None
 
     def __repr__(self):
         """Object representation."""
