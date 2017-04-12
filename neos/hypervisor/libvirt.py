@@ -3,6 +3,7 @@
 """Libvirt Hypervisor file."""
 try:
     import libvirt
+    from libvirt import libvirtError
 except ImportError:  # bypassing error for now due Travis tests
     pass
 
@@ -115,3 +116,77 @@ class NeosHypervisorLibvirt(NeosHypervisor):
         memory = self.instance.getMemoryStats(
             libvirt.VIR_NODE_MEMORY_STATS_ALL_CELLS)
         return humanize_bytes(memory['free'], unit)
+
+    @property
+    def list_all_vms(self):
+        """Return a list of all VMS."""
+        return self.list_stopped_vms + self.list_running_vms
+
+    @property
+    def list_stopped_vms(self):
+        """Return a list of stopped VMS."""
+        vms = []
+        for vm_instance in self.instance.listDefinedDomains():
+            vms.append(NeosLibvirtVM(self.instance.lookupByName(vm_instance)))
+        return vms
+
+    @property
+    def list_running_vms(self):
+        """Return a list of running vms."""
+        vms = []
+        for vm_id in self.instance.listDomainsID():
+            vm_instance = self.instance.lookupByID(vm_id)
+            vms.append(NeosLibvirtVM(vm_instance))
+        return vms
+
+    @property
+    def list_nw_filters(self):
+        """Return a list of the network filter."""
+        return self.instance.listNWFilters()
+
+    def get_vm(self, name):
+        """Return VM object if exists."""
+        try:
+            return NeosLibvirtVM(self.instance.lookupByName(name))
+        except libvirtError as error:
+            return error
+
+
+class NeosLibvirtVM(object):
+    """Initialize libvirt instance."""
+
+    def __init__(self, instance):
+        """initialize object."""
+        self._instance = instance
+        self.name = self._instance.name()
+
+    def __repr__(self):
+        """Define object representation."""
+        return "<{0} ({1}): {2}>".format(self.__class__.__name__,
+                                         self.status,
+                                         self.name)
+
+    def start(self):
+        """Start virtual machine."""
+        return not bool(self._instance.create())
+
+    def stop(self):
+        """Stop virtual machine."""
+        return not bool(self._instance.destroy())
+
+    @property
+    def status(self):
+        """
+        Return virtual machine state.
+
+        [1,1] -> vm is running
+        """
+        if bool(self._instance.state() == [1, 1]):
+            return 'running'
+        else:
+            return 'stopped'
+
+    @property
+    def snapshots(self):
+        """Return number of snapshots."""
+        return len(self._instance.listAllSnapshots())
