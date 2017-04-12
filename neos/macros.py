@@ -28,3 +28,5 @@ PROJECT_CLASSIFIERS = [
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
 ]
+
+PROJECT_REQUIREMENTS = []
